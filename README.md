@@ -2,18 +2,21 @@
 Gene Variant Annotation - ETL for database integration
 
 # Set up
-Create Conda Environment - One time```
+Create Conda Environment - One time
+```
 # Update base conda
 conda update -n base -c defaults conda
 # Create environment
 conda create --prefix env-conda -y
 ```
 
-Activate Conda Environment```
+Activate Conda Environment
+```
 conda activate env-conda
 ```
 
-Install deps - One time```
+Install deps - One time
+```
 conda install -c conda-forge openjdk
 ```
 Note that JDK 12 or higher required for running SNPEff. Installed JDK version 17
