@@ -51,3 +51,29 @@ java -Xmx8g -jar snpEff/snpEff.jar GRCh38.86 data/vcf/wxs.MuTect2.aliquot.vcf > 
 
 ### Alternative genome build versions for SNPEff
 We used GR38.86 for our reference genome. To view other builds run `java -Xmx4g -jar snpEff.jar databases | grep GRCh38`
+
+# Prep for BMEG db import
+Purpose: format into json files the relevant data to be imported into BMEG. This will create the format expected by BMEG.
+
+First, understand the VCF format fields:
+```
+1 Chromosome
+
+2 Co-ordinate - The start coordinate of the variant.
+
+3 Identifier
+
+4 Reference allele - The reference allele is whatever is found in the reference genome. It is not necessarily the major allele.
+
+5 Alternative allele - The alternative allele is the allele found in the sample you are studying.
+
+6 Score - Quality score out of 100.
+
+7 Pass/fail - If it passed quality filters.
+
+8 Further information - Allows you to provide further information on the variants. Keys in the INFO field can be defined in header lines above the table.
+
+9 Information about the following columns - The GT in the FORMAT column tells us to expect genotypes in the following columns.
+
+10 Individual identifier (optional) - The previous column told us to expect to see genotypes here. The genotype is in the form 0|1, where 0 indicates the reference allele and 1 indicates the alternative allele, i.e it is heterozygous. The vertical pipe | indicates that the genotype is phased, and is used to indicate which chromosome the alleles are on. If this is a slash / rather than a vertical pipe, it means we don’t know which chromosome they are on.
+```
