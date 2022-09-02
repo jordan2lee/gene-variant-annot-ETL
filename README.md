@@ -52,6 +52,7 @@ conda install conda-build
 conda develop sifter
 ```
 
+
 # Download MAF from GDC
 Get an example MAF from GDC AWG portal (protected access) https://portal.awg.gdc.cancer.gov/ or use any MAF file. We will use a MuTect2 MAF (details in `gdc_manifest_brca-maf.txt`) 373dfc1d-8e9f-4132-9d23-81bd0a513e36.wxs.MuTect2.aliquot.maf.gz
 
@@ -96,7 +97,17 @@ git submodule add https://github.com/bmeg/bmeg-dictionary
 git submodule update --init --recursive
 ```
 
+Run SNPEff transform. Create JSON strings containing harmonized data ready for database import.
 
+Create output JSON file location
+```
+output/snpeff
+```
+
+Transform and harmonize data
+```
+
+```
 
 # VCF Background
 Purpose: format into json files the relevant data to be imported into BMEG. This will create the format expected by BMEG.
