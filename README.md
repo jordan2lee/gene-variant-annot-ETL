@@ -80,3 +80,9 @@ First, understand the VCF format fields:
 
 10 Individual identifier (optional) - The previous column told us to expect to see genotypes here. The genotype is in the form 0|1, where 0 indicates the reference allele and 1 indicates the alternative allele, i.e it is heterozygous. The vertical pipe | indicates that the genotype is phased, and is used to indicate which chromosome the alleles are on. If this is a slash / rather than a vertical pipe, it means we don’t know which chromosome they are on.
 ```
+
+## WIP - BMEG Authenticate - Only for testing purposes to see examples
+
+Create BMEG credential file from [bmeg.io](https://bmeg.io/) under Analyze > Getting Started > Authentication
+
+Store credential file as `secrets/bmeg_credentials.json`
