@@ -45,14 +45,6 @@ git checkout flame
 go build ./
 ```
 
-Prep for adding our sifter module in conda. Required to run sifter for ETL work. `conda-build` is needed to run conda develop command that will add to $PATH
-```
-cd ..
-conda install conda-build
-conda develop sifter
-```
-
-
 # Download MAF from GDC
 Get an example MAF from GDC AWG portal (protected access) https://portal.awg.gdc.cancer.gov/ or use any MAF file. We will use a MuTect2 MAF (details in `gdc_manifest_brca-maf.txt`) 373dfc1d-8e9f-4132-9d23-81bd0a513e36.wxs.MuTect2.aliquot.maf.gz
 
