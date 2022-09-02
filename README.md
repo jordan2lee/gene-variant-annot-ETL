@@ -1,8 +1,14 @@
 # gene-variant-annot-ETL
 Gene Variant Annotation - ETL for database integration
 
+# Associated GitHub Repositories
+The main analysis will take place in `https://github.com/kellrott/bmeg-etl-alchemist` but here are the full list of associated repos
+
++ https://github.com/bmeg/sifter
++ https://github.com/bmeg/bmeg-dictionary/tree/gene-drug-association
+
 # Set up
-Create Conda Environment - One time
+1. Create Conda Environment - One time
 ```
 # Update base conda
 conda update -n base -c defaults conda
@@ -10,16 +16,41 @@ conda update -n base -c defaults conda
 conda create --prefix env-conda -y
 ```
 
-Activate Conda Environment
+2. Activate Conda Environment
 ```
 conda activate env-conda
 ```
 
-Install deps - One time
+3. Install deps - One time
+
+3A. Download Go version 1.18 or higher https://go.dev/
+
+3B. JDK for Java
 ```
 conda install -c conda-forge openjdk
 ```
 Note that JDK 12 or higher required for running SNPEff. Installed JDK version 17
+
+
+# Build Required Binaries
+Clone and build binaries for Lathe and Sifter. Then add to $PATH (ex. working environment bin).
+
+Git clone via ssh protocol:
+
+Sifter (`flame` branch as of 9/2/22, or use `main` branch)
+```
+git clone git@github.com:bmeg/sifter.git
+cd sifter
+git checkout flame
+go build ./
+```
+
+Prep for adding our sifter module in conda. Required to run sifter for ETL work. `conda-build` is needed to run conda develop command that will add to $PATH
+```
+cd ..
+conda install conda-build
+conda develop sifter
+```
 
 # Download MAF from GDC
 Get an example MAF from GDC AWG portal (protected access) https://portal.awg.gdc.cancer.gov/ or use any MAF file. We will use a MuTect2 MAF (details in `gdc_manifest_brca-maf.txt`) 373dfc1d-8e9f-4132-9d23-81bd0a513e36.wxs.MuTect2.aliquot.maf.gz
@@ -55,7 +86,19 @@ java -Xmx8g -jar snpEff/snpEff.jar GRCh38.86 data/vcf/wxs.MuTect2.aliquot.vcf > 
 ### Alternative genome build versions for SNPEff
 We used GR38.86 for our reference genome. To view other builds run `java -Xmx4g -jar snpEff.jar databases | grep GRCh38`
 
-# Prep for BMEG db import
+
+# Allele ETL
+First we will need to add the data model (data dictionary) as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+
+Add `bmeg-dictionary` as a submodule and track the main branch `develop` (as of 9/2/22)
+```
+git submodule add https://github.com/bmeg/bmeg-dictionary
+git submodule update --init --recursive
+```
+
+
+
+# VCF Background
 Purpose: format into json files the relevant data to be imported into BMEG. This will create the format expected by BMEG.
 
 First, understand the VCF format fields:
