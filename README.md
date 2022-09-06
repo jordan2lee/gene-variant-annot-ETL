@@ -12,7 +12,7 @@ All except sifter will be added as a [Git Submodule](https://git-scm.com/book/en
 
 # Set up
 1. Create Conda Environment - One time
-```
+```commandline
 # Update base conda
 conda update -n base -c defaults conda
 # Create environment
@@ -20,7 +20,7 @@ conda create --prefix env-conda -y
 ```
 
 2. Activate Conda Environment
-```
+```commandline
 conda activate env-conda
 ```
 
@@ -29,7 +29,7 @@ conda activate env-conda
 3A. Download Go version 1.18 or higher https://go.dev/
 
 3B. JDK for Java
-```
+```commandline
 conda install -c conda-forge openjdk
 ```
 Note that JDK 12 or higher required for running SNPEff. Installed JDK version 17
@@ -41,7 +41,7 @@ Clone and build binaries for Lathe and Sifter. Then add to $PATH (ex. working en
 Git clone via ssh protocol:
 
 Sifter (`flame` branch as of 9/2/22, or use `main` branch)
-```
+```commandline
 git clone git@github.com:bmeg/sifter.git
 cd sifter
 git checkout flame
@@ -51,18 +51,18 @@ go build ./
 # Download MAF from GDC
 Get an example MAF from GDC AWG portal (protected access) https://portal.awg.gdc.cancer.gov/ or use any MAF file. We will use a MuTect2 MAF (details in `gdc_manifest_brca-maf.txt`) 373dfc1d-8e9f-4132-9d23-81bd0a513e36.wxs.MuTect2.aliquot.maf.gz
 
-```
+```commandline
 tar -xf gdc_download_20220825_214206.583463.tar.gz
 ```
 
 # Convert MAF to VCF
-```
+```commandline
 python scripts/maf2vcf.py data/maf/7478e5e1-7714-4b81-b098-1800964a9962/373dfc1d-8e9f-4132-9d23-81bd0a513e36.wxs.MuTect2.aliquot.maf.gz data/vcf/wxs.MuTect2.aliquot.vcf
 ```
 
 # Run SnpEff - Input VCF into SnpEff
 Install SnpEff https://pcingola.github.io/SnpEff/download/ where the directions from the url include:
-```
+```commandline
 # Download latest version
 wget https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip
 
@@ -75,7 +75,7 @@ unzip snpEff_latest_core.zip
 > JDK v12 or higher required to run Java commands for SNPEff
 
 Now run SnpEff
-```
+```commandline
 java -Xmx8g -jar snpEff/snpEff.jar GRCh38.86 data/vcf/wxs.MuTect2.aliquot.vcf > data/vcf/wxs.MuTect2.aliquot.ann.vcf
 ```
 
@@ -107,7 +107,7 @@ Submodule path 'bmeg-etl/tools/vcf2maf-tools': checked out '7ba1342728c6e31d296a
 First we will need to add the data model (data dictionary) as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
 
 Add `bmeg-dictionary` as a submodule and track the main branch `develop` (as of 9/2/22)
-```
+```commandline
 git submodule add https://github.com/bmeg/bmeg-dictionary
 git submodule update --init --recursive
 ```
@@ -120,7 +120,7 @@ output/snpeff
 ```
 
 Transform and harmonize data
-```
+```commandline
 sifter/sifter run transform/allele/allele_transform.yaml
 ```
 
