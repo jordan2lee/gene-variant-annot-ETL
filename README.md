@@ -98,7 +98,7 @@ output/snpeff
 
 Transform and harmonize data
 ```
-
+sifter/sifter run transform/allele/allele_transform.yaml
 ```
 
 # VCF Background
