@@ -1,3 +1,6 @@
 [submodule "bmeg-dictionary"]
 	path = bmeg-dictionary
 	url = https://github.com/bmeg/bmeg-dictionary
+[submodule "bmeg-etl"]
+	path = bmeg-etl
+	url = https://github.com/bmeg/bmeg-etl

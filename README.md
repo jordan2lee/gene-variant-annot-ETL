@@ -6,6 +6,9 @@ The main analysis will take place in `https://github.com/kellrott/bmeg-etl-alche
 
 + https://github.com/bmeg/sifter
 + https://github.com/bmeg/bmeg-dictionary/tree/gene-drug-association
++ https://github.com/bmeg/bmeg-etl
+
+All except sifter will be added as a [Git Submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules). Instructions below on adding these submodules.
 
 # Set up
 1. Create Conda Environment - One time
@@ -79,6 +82,26 @@ java -Xmx8g -jar snpEff/snpEff.jar GRCh38.86 data/vcf/wxs.MuTect2.aliquot.vcf > 
 ### Alternative genome build versions for SNPEff
 We used GR38.86 for our reference genome. To view other builds run `java -Xmx4g -jar snpEff.jar databases | grep GRCh38`
 
+# Adding BMEG ETL Submodule
+```commandline
+git submodule add https://github.com/bmeg/bmeg-etl
+cd bmeg-etl
+git checkout flow
+git checkout -b allele
+cd ..
+git submodule update --init --recursive
+```
+
+Which should output similar lines:
+```
+Submodule path 'bmeg-etl': checked out '1bad97678888c5228eec07c9fc1c6f4cd3439eb4'
+Submodule 'src/bmeg/bmeg-dictionary' (https://github.com/bmeg/bmeg-dictionary.git) registered for path 'bmeg-etl/src/bmeg/bmeg-dictionary'
+Submodule 'tools/vcf2maf-tools' (https://github.com/OpenGenomics/vcf2maf-tools.git) registered for path 'bmeg-etl/tools/vcf2maf-tools'
+Cloning into '/Users/leejor/Ellrott_Lab/11_ALCHEMIST/gene-variant-annot-ETL/bmeg-etl/src/bmeg/bmeg-dictionary'...
+Cloning into '/Users/leejor/Ellrott_Lab/11_ALCHEMIST/gene-variant-annot-ETL/bmeg-etl/tools/vcf2maf-tools'...
+Submodule path 'bmeg-etl/src/bmeg/bmeg-dictionary': checked out 'e30176b8448d4cf95cf4d8a8b8c5310b36e2c4b5'
+Submodule path 'bmeg-etl/tools/vcf2maf-tools': checked out '7ba1342728c6e31d296a6d18853c93f2f7a883b1'
+```
 
 # Allele ETL
 First we will need to add the data model (data dictionary) as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
