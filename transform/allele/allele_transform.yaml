@@ -1,0 +1,123 @@
+
+class: sifter
+
+name: snpeff
+outdir: ../../output/snpeff
+
+config:
+  snpeff:
+    type: File
+    default: ../../data/vcf/simple_example3.vcf
+  # table:
+  #   type: File
+  #   default: ../../output/gdc/gdc.aliquotAlias.table.json.gz
+  schema:
+    type: Dir
+    default: ../../bmeg-dictionary/gdcdictionary/schemas/
+
+inputs:
+  vcfReader:
+    tableLoad:
+      input: "{{config.snpeff}}"
+      sep: "\t"
+      columns:
+        - chromosome
+        - start
+        - id
+        - ref
+        - alt
+        - QUAL
+        - filter
+        - INFO
+        # - FORMAT
+        # - TUMOR
+        # - NORMAL
+
+pipelines:
+  # transform:
+  #   - from: snpeffReader
+  #   - lookup:
+  #       replace: Tumor_Sample_Barcode
+  #       json:
+  #         input: "{{config.table}}"
+  #         key: submitter_id
+  #         value: aliquot_id
+  #   - lookup:
+  #       replace: Matched_Norm_Sample_Barcode
+  #       json:
+  #         input: "{{config.table}}"
+  #         key: submitter_id
+  #         value: aliquot_id
+  #   - lookup:
+  #       lookup: "{{row.Tumor_Sample_Barcode}}"
+  #       json:
+  #         input: "{{config.table}}"
+  #         key: aliquot_id
+  #       copy:
+  #         project_id: project_id
+  #   - emit:
+  #       name: raw
+
+  # callset:
+  #   - from: transform
+  #   - project:
+  #       mapping:
+  #         id: "{{row.project_id}}:{{row.Tumor_Sample_Barcode}}:{{row.Matched_Norm_Sample_Barcode}}"
+  #         submitter_id: "{{row.project_id}}:{{row.Tumor_Sample_Barcode}}:{{row.Matched_Norm_Sample_Barcode}}"
+  #   - distinct:
+  #       value: "{{row.id}}"
+  #   - project:
+  #       mapping:
+  #         tumor_aliquot_id: "{{row.Tumor_Sample_Barcode}}"
+  #         normal_aliquot_id: "{{row.Matched_Norm_Sample_Barcode}}"
+  #   - objectCreate:
+  #       class: somatic_callset
+  #       schema: "{{config.schema}}"
+  #   - emit:
+  #       name: callset
+
+  variant:
+    - from: vcfReader
+    - map:
+        gpython: |
+          def fix(x):
+            info = x['INFO']
+            info = info.split('|')
+            Gene_ID = info[4]
+            Transcript_BioType = info[7]
+            hgvsc = info[9]
+            hgvsp = info[10]
+            x['ensembl_gene'] = Gene_ID
+            x['biotype'] = Transcript_BioType
+            x['hgvsc']=hgvsc
+            x['hgvsp'] = hgvsp
+            return x
+        method: fix
+    - project:
+        mapping:
+          # ensembl_transcript: "{{row.Transcript_ID}}"
+          # ensembl_protein: "{{row.ENSP}}"
+          genome: "PLACEHOLDER"
+    #
+    # - fieldType:
+    #     t_depth: int
+    #     t_ref_count: int
+    #     t_alt_count: int
+    #     n_depth: int
+    #     n_ref_count: int
+    #     n_alt_count: int
+    #     start: int
+    #
+    # - project:
+    #     mapping:
+    #       allele_id: "{{row.#CHROM}}:{{row.POS}}:{{row.REF}}:{{row.ALT}}"
+    #       # allele_id: "{{row.genome}}:{{row.chromosome}}:{{row.start}}:{{row.ref}}:{{row.alt}}"
+    # - hash:
+    #     field: gid
+    #     method: sha1
+    #     value: "{{row.allele_id}}"
+    # - project:
+    #     mapping:
+    #       gid: "Allele:{{row.gid}}"
+    - emit:
+        name: allele
