@@ -8,9 +8,6 @@ config:
   snpeff:
     type: File
     default: ../../data/vcf/simple_example3.vcf
-  # table:
-  #   type: File
-  #   default: ../../output/gdc/gdc.aliquotAlias.table.json.gz
   schema:
     type: Dir
     default: ../../bmeg-dictionary/gdcdictionary/schemas/
@@ -29,53 +26,8 @@ inputs:
         - QUAL
         - filter
         - INFO
-        # - FORMAT
-        # - TUMOR
-        # - NORMAL
 
 pipelines:
-  # transform:
-  #   - from: snpeffReader
-  #   - lookup:
-  #       replace: Tumor_Sample_Barcode
-  #       json:
-  #         input: "{{config.table}}"
-  #         key: submitter_id
-  #         value: aliquot_id
-  #   - lookup:
-  #       replace: Matched_Norm_Sample_Barcode
-  #       json:
-  #         input: "{{config.table}}"
-  #         key: submitter_id
-  #         value: aliquot_id
-  #   - lookup:
-  #       lookup: "{{row.Tumor_Sample_Barcode}}"
-  #       json:
-  #         input: "{{config.table}}"
-  #         key: aliquot_id
-  #       copy:
-  #         project_id: project_id
-  #   - emit:
-  #       name: raw
-
-  # callset:
-  #   - from: transform
-  #   - project:
-  #       mapping:
-  #         id: "{{row.project_id}}:{{row.Tumor_Sample_Barcode}}:{{row.Matched_Norm_Sample_Barcode}}"
-  #         submitter_id: "{{row.project_id}}:{{row.Tumor_Sample_Barcode}}:{{row.Matched_Norm_Sample_Barcode}}"
-  #   - distinct:
-  #       value: "{{row.id}}"
-  #   - project:
-  #       mapping:
-  #         tumor_aliquot_id: "{{row.Tumor_Sample_Barcode}}"
-  #         normal_aliquot_id: "{{row.Matched_Norm_Sample_Barcode}}"
-  #   - objectCreate:
-  #       class: somatic_callset
-  #       schema: "{{config.schema}}"
-  #   - emit:
-  #       name: callset
-
   variant:
     - from: vcfReader
     - map:
